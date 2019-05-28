@@ -96,7 +96,7 @@ server <- function(input, output) {
     output[["img1"]] <- renderImage({
       
       filename <- normalizePath(file.path('./images', paste('elastyczne_sondaze', '.png', sep='')))
-      list(src = filename, width = 700, height = 400)
+      list(src = filename, height = 400)
     
       }, deleteFile = FALSE)
     
@@ -105,13 +105,23 @@ server <- function(input, output) {
         plot_1()
     )
     
-    # img2
+    output[["img2"]] <- renderImage({
+      
+      filename <- normalizePath(file.path('./images', paste('jak_po_metaamfetaminie', '.png', sep='')))
+      list(src = filename, height = 400)
+      
+    }, deleteFile = FALSE)
     
     output[["plot2"]] <- renderPlot(
         plot_2()
     )
     
-    # img3
+    output[["img3"]] <- renderImage({
+      
+      filename <- normalizePath(file.path('./images', paste('niech_sie_kreci', '.png', sep='')))
+      list(src = filename, height = 400)
+      
+    }, deleteFile = FALSE)
     
     output[["plot3"]] <- renderPlotly(
         plot_3()

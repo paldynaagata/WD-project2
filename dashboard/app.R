@@ -9,6 +9,7 @@
 library(shiny)
 library(shinydashboard)
 library(ggplot2)
+library(dplyr)
 library(plotly)
 source("data_for_charts.R")
 
@@ -34,9 +35,9 @@ ui <- dashboardPage(
                      menuSubItem("Kobiety giganty", tabName = "subitem4"),
                      menuSubItem("Nie wiem, nie znam sie", tabName = "subitem5"),
                      menuSubItem("Kinowe hity", tabName = "subitem6"),
-                     menuSubItem("Sub-item 1", tabName = "subitem7"),
-                     menuSubItem("Sub-item 2", tabName = "subitem8"),
-                     menuSubItem("Sub-item 2", tabName = "subitem9")
+                     menuSubItem("Opinie Polakow", tabName = "subitem7"),
+                     menuSubItem("Wysokie emerytury", tabName = "subitem8"),
+                     menuSubItem("Sluby", tabName = "subitem9")
             )
         )
     ),
@@ -143,6 +144,57 @@ ui <- dashboardPage(
                                  solidHeader = TRUE, collapsible = TRUE, imageOutput("img6"), width = 5),
                              box(title = "Poprawny wykres", status = "success", solidHeader = TRUE, 
                                  collapsible = TRUE, collapsed = TRUE, plotOutput("plot6"), width = 7))
+            ),
+            tabItem("subitem7",
+                    fluidRow(box(title = "Pytanie", status = "primary", 
+                                 solidHeader = TRUE, collapsible = TRUE, 
+                                 textInput("text_in7", label = h3("?"), value = ""),
+                                 actionButton("runRF7", "Sprawdz"),
+                                 tags$p(textOutput("text_out7"), style = "font-size: 200%;"),
+                                 width = 6),
+                             box(title = "Podsumowanie", status = "primary", 
+                                 solidHeader = TRUE, collapsible = TRUE, collapsed = TRUE,
+                                 htmlOutput("summary7"),
+                                 width = 6)
+                    ),
+                    fluidRow(box(title = "Niepoprawny wykres", status = "danger", 
+                                 solidHeader = TRUE, collapsible = TRUE, imageOutput("img7"), width = 6),
+                             box(title = "Poprawny wykres", status = "success", solidHeader = TRUE, 
+                                 collapsible = TRUE, collapsed = TRUE, plotOutput("plot7"), width = 6))
+            ),
+            tabItem("subitem8",
+                    fluidRow(box(title = "Pytanie", status = "primary", 
+                                 solidHeader = TRUE, collapsible = TRUE, 
+                                 textInput("text_in8", label = h3("?"), value = ""),
+                                 actionButton("runRF8", "Sprawdz"),
+                                 tags$p(textOutput("text_out8"), style = "font-size: 200%;"),
+                                 width = 6),
+                             box(title = "Podsumowanie", status = "primary", 
+                                 solidHeader = TRUE, collapsible = TRUE, collapsed = TRUE,
+                                 htmlOutput("summary8"),
+                                 width = 6)
+                    ),
+                    fluidRow(box(title = "Niepoprawny wykres", status = "danger", 
+                                 solidHeader = TRUE, collapsible = TRUE, imageOutput("img8"), width = 6),
+                             box(title = "Poprawny wykres", status = "success", solidHeader = TRUE, 
+                                 collapsible = TRUE, collapsed = TRUE, plotOutput("plot8"), width = 6))
+            ),
+            tabItem("subitem9",
+                    fluidRow(box(title = "Pytanie", status = "primary", 
+                                 solidHeader = TRUE, collapsible = TRUE, 
+                                 textInput("text_in9", label = h3("Ile slubow zawarto w 2009"), value = ""),
+                                 actionButton("runRF9", "Sprawdz"),
+                                 tags$p(textOutput("text_out9"), style = "font-size: 200%;"),
+                                 width = 6),
+                             box(title = "Podsumowanie", status = "primary", 
+                                 solidHeader = TRUE, collapsible = TRUE, collapsed = TRUE,
+                                 htmlOutput("summary9"),
+                                 width = 6)
+                    ),
+                    fluidRow(box(title = "Niepoprawny wykres", status = "danger", 
+                                 solidHeader = TRUE, collapsible = TRUE, imageOutput("img9"), width = 6),
+                             box(title = "Poprawny wykres", status = "success", solidHeader = TRUE, 
+                                 collapsible = TRUE, collapsed = TRUE, plotOutput("plot9"), width = 6))
             ),
             tabItem("about",
                     "Aplikacja shiny dashboard, pozwalajaca testowac wplyw rozmaitych bledow wizualizacyjnych na 
@@ -352,6 +404,108 @@ server <- function(input, output) {
       plot_6()
     )
     
+    text_to_display7 <- reactiveVal("Wcisnij przycisk 'Sprawdz', aby poznac poprawna odpowiedz")
+    
+    observeEvent(input$runRF7, {
+      ifelse(input$text_in7 == "", text_to_display7("Najpierw wpisz swoja odpowiedz."), text_to_display7("Poprawna odpowiedz: 53."))
+    })
+    
+    output$text_out7 <- renderPrint({  text_to_display7() })
+    
+    output$summary7 <- renderUI({ 
+      HTML(paste("Co bylo zle:",
+                 "- rozciagniecie slupkow poprzez dodanie podpisow w ramkach w kolorze slupkow",
+                 "- zly podpis slupka dla partii Nowoczesna", 
+                 "- zbedne liczby pod slupkami, nie wiadomo co znacza",
+                 "- brak podpisow osi, brak tytulu",
+                 " ",
+                 "Co zostalo poprawione:",
+                 "- podpisy pod slupkami bez ramek",
+                 "- poprawny podpis slupka dla partii Nowoczesna", 
+                 "- pozbyto sie zbednych liczb pod slupkami",
+                 "- dodano podpis osi pionowej i tytul",
+                 sep="<br/>"))
+    })
+    
+    output[["img7"]] <- renderImage({
+      
+      filename <- normalizePath(file.path("./images", paste("matka", ".jpg", sep = "")))
+      list(src = filename, height = 400)
+      
+    }, deleteFile = FALSE)
+    
+    
+    output[["plot7"]] <- renderPlot(
+      plot_7()
+    )
+    text_to_display8 <- reactiveVal("Wcisnij przycisk 'Sprawdz', aby poznac poprawna odpowiedz")
+    
+    observeEvent(input$runRF8, {
+      ifelse(input$text_in8 == "", text_to_display8("Najpierw wpisz swoja odpowiedz."), text_to_display8("Poprawna odpowiedz: 53."))
+    })
+    
+    output$text_out8 <- renderPrint({  text_to_display8() })
+    
+    output$summary8 <- renderUI({ 
+      HTML(paste("Co bylo zle:",
+                 "- rozciagniecie slupkow poprzez dodanie podpisow w ramkach w kolorze slupkow",
+                 "- zly podpis slupka dla partii Nowoczesna", 
+                 "- zbedne liczby pod slupkami, nie wiadomo co znacza",
+                 "- brak podpisow osi, brak tytulu",
+                 " ",
+                 "Co zostalo poprawione:",
+                 "- podpisy pod slupkami bez ramek",
+                 "- poprawny podpis slupka dla partii Nowoczesna", 
+                 "- pozbyto sie zbednych liczb pod slupkami",
+                 "- dodano podpis osi pionowej i tytul",
+                 sep="<br/>"))
+    })
+    
+    output[["img8"]] <- renderImage({
+      
+      filename <- normalizePath(file.path("./images", paste("emerytury", ".png", sep = "")))
+      list(src = filename, height = 400)
+      
+    }, deleteFile = FALSE)
+    
+    
+    output[["plot8"]] <- renderPlot(
+      plot_8()
+    )
+    text_to_display9 <- reactiveVal("Wcisnij przycisk 'Sprawdz', aby poznac poprawna odpowiedz")
+    
+    observeEvent(input$runRF9, {
+      ifelse(input$text_in9 == "", text_to_display9("Najpierw wpisz swoja odpowiedz."), text_to_display9("Poprawna odpowiedz: 53."))
+    })
+    
+    output$text_out9 <- renderPrint({  text_to_display9() })
+    
+    output$summary9 <- renderUI({ 
+      HTML(paste("Co bylo zle:",
+                 "- rozciagniecie slupkow poprzez dodanie podpisow w ramkach w kolorze slupkow",
+                 "- zly podpis slupka dla partii Nowoczesna", 
+                 "- zbedne liczby pod slupkami, nie wiadomo co znacza",
+                 "- brak podpisow osi, brak tytulu",
+                 " ",
+                 "Co zostalo poprawione:",
+                 "- podpisy pod slupkami bez ramek",
+                 "- poprawny podpis slupka dla partii Nowoczesna", 
+                 "- pozbyto sie zbednych liczb pod slupkami",
+                 "- dodano podpis osi pionowej i tytul",
+                 sep="<br/>"))
+    })
+    
+    output[["img9"]] <- renderImage({
+      
+      filename <- normalizePath(file.path("./images", paste("sluby", ".png", sep = "")))
+      list(src = filename, height = 400)
+      
+    }, deleteFile = FALSE)
+    
+    
+    output[["plot9"]] <- renderPlot(
+      plot_9()
+    )
 }
 
 shinyApp(ui, server)

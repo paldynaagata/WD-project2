@@ -55,13 +55,33 @@ movies <- data.frame(Title = c("Avengers: \nKoniec Gry","Avengers: \nWojna bez k
 
 
 ## 7) 
+d_zus<-read.csv2('https://raw.githubusercontent.com/radziq1302/CloudApp/master/danezus.csv',sep = ' ', header = F,colClasses=c("numeric",'character',rep("numeric",5)))
+d_zus<-transform(d_zus, newcol=as.character(paste(d_zus$V1, d_zus$V2, d_zus$V3)))
+d_zus1<-data.frame(d_zus, stringsAsFactors=FALSE)
+d_zus1$newcol[]<-as.character(d_zus1$newcol)
+d_zus1$newcol[] <- lapply(d_zus1$newcol, as.character)
+#d_zus1$newcol %>% dplyr::mutate_if(is.factor, as.character) -> d_zus1$newcol
+d_zus$newcol[nrow(d_zus)]='> 4000'
 
+etykietki<-d_zus$newcol[-length(d_zus$newcol)]
+etykietki<-etykietki[-length(etykietki)]
+etykietki<-as.character(etykietki)
+etykietki<-c(etykietki, '>4000')
+etykietki
+d_zus<-d_zus[-nrow(d_zus),]
 
 ## 8) 
-
+odpowiedzi<-c('zdecydowanie tak','raczej tak','trudno powiedzieæ','raczej nie','zdecydowanie nie')
+wartosci<-c(28,25,17,16,14)
+tvpis<-data.frame(value=wartosci, resp=as.character(odpowiedzi), fac<-rep(1,5))
+tvpisbis<-data.frame(Opinie=c(rep('zdecydowanie tak',28),rep('raczej tak',25),rep('trudno powiedzieæ',17),rep('raczej nie',16),rep('zdecydowanie nie',14)), fac<-rep(1,100))
+tvpisbis$Opinie = factor(tvpisbis$Opinie,levels(tvpisbis$Opinie)[rev(c(5,2,3,1,4))])
 
 ## 9)
-
+dmar<-read.csv('https://raw.githubusercontent.com/radziq1302/CloudApp/master/wdm.csv', header = F)
+colnames(dmar)<-c('rok','liczba')
+dmar$liczba<-round(dmar$liczba)
+dmar$srednia<-c(1,rep(0,4),1,rep(0,4),1,rep(0,4),1,rep(0,4),1,rep(0,4),rep(1,21))
 
 #---------------------------------------------------------------------------------------------------------------------------
 
@@ -155,10 +175,32 @@ plot_6 <- function() {
 
 
 ## 7) 
-
+plot_7 <- function() {
+  ggplot(data = tvpisbis[order(tvpisbis$Opinie),], aes(fac))+#, aes(x = fac)) +
+    geom_bar(aes(fill=Opinie), width = 0.5)+scale_fill_manual(values=c("#14E9E4","#A4FBF9","#E7E3E7","#F07EEB","#B60FAE"))+ theme_bw()+theme(axis.title.x=element_blank(),
+                                                                                                                                axis.text.x=element_blank(),
+                                                                                                                                axis.ticks.x=element_blank())+
+    
+    labs(title="Czy domalowanie têczowej auroli do wizerunku \n Matki Boskiej to profanacja?", subtitle="wersja poprawiona")+ylab("wartoœæ procentowa")+xlab("")+
+    xlim(0.25,1.75)
+  
+}
 
 ## 8) 
-
+plot_8 <- function() {
+  ggplot(data = d_zus,aes(x = reorder(d_zus$newcol, d_zus$V1), y=d_zus$V4))+geom_bar(stat="identity",fill = "steelblue") + theme_bw()+
+    theme(axis.text.x=element_text(size=12,angle=45,hjust=1))+
+    scale_x_discrete(labels=etykietki)+labs(title="Jak wysokie emerytury maj¹ Polacy", subtitle="wersja poprawiona")+ylab("wartoœæ procentowa")+xlab("wysokoœæ emerytury [z³]")                                                                                                                       
+  
+}
 
 ## 9)
-
+plot_9 <- function() {
+  ggplot(dmar[11:nrow(dmar),], aes(x=rok, y=liczba))+geom_bar(stat = 'identity', width = 0.9, aes(fill=as.factor(srednia))) +theme_bw()+
+    theme(axis.text.x=element_text(angle=45,hjust=1),aspect.ratio = 1/2.5, legend.position = 'bottom')+scale_fill_manual(values=c("#ECECEC","#870B63"))+
+    coord_flip() +
+    geom_text(size = 3,aes(label=liczba), position=position_dodge(width=0.9),hjust=-0.25)+ 
+    scale_fill_discrete(name = 'ród³o danych', labels = c('brak danych', 'dane GUS'))+
+    labs(title="Liczba zawartych ma³¿eñœtw", subtitle="wersja poprawiona")+
+    ylab("liczba ma³¿eñœtw")+xlab("rok") 
+}

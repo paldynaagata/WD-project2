@@ -148,7 +148,7 @@ ui <- dashboardPage(
             tabItem("subitem7",
                     fluidRow(box(title = "Pytanie", status = "primary", 
                                  solidHeader = TRUE, collapsible = TRUE, 
-                                 textInput("text_in7", label = h3("?"), value = ""),
+                                 textInput("text_in7", label = h3("Ile % Polakow uwaza, ze dorysowanie teczy jest obraze uczuc religijnych"), value = ""),
                                  actionButton("runRF7", "Sprawdz"),
                                  tags$p(textOutput("text_out7"), style = "font-size: 200%;"),
                                  width = 6),
@@ -165,7 +165,7 @@ ui <- dashboardPage(
             tabItem("subitem8",
                     fluidRow(box(title = "Pytanie", status = "primary", 
                                  solidHeader = TRUE, collapsible = TRUE, 
-                                 textInput("text_in8", label = h3("?"), value = ""),
+                                 textInput("text_in8", label = h3("Ile mniej wiecej wynosi srednia emerytura?"), value = ""),
                                  actionButton("runRF8", "Sprawdz"),
                                  tags$p(textOutput("text_out8"), style = "font-size: 200%;"),
                                  width = 6),
@@ -182,7 +182,7 @@ ui <- dashboardPage(
             tabItem("subitem9",
                     fluidRow(box(title = "Pytanie", status = "primary", 
                                  solidHeader = TRUE, collapsible = TRUE, 
-                                 textInput("text_in9", label = h3("Ile slubow zawarto w 2009"), value = ""),
+                                 textInput("text_in9", label = h3("Czy w 2011 zawarto mniej malzesnestw niz w 2012?"), value = ""),
                                  actionButton("runRF9", "Sprawdz"),
                                  tags$p(textOutput("text_out9"), style = "font-size: 200%;"),
                                  width = 6),
@@ -475,7 +475,7 @@ server <- function(input, output) {
     text_to_display9 <- reactiveVal("Wcisnij przycisk 'Sprawdz', aby poznac poprawna odpowiedz")
     
     observeEvent(input$runRF9, {
-      ifelse(input$text_in9 == "", text_to_display9("Najpierw wpisz swoja odpowiedz."), text_to_display9("Poprawna odpowiedz: 53."))
+      ifelse(input$text_in9 == "", text_to_display9("Najpierw wpisz swoja odpowiedz."), text_to_display9("Poprawna odpowiedz: Nie, nie zawaarto."))
     })
     
     output$text_out9 <- renderPrint({  text_to_display9() })

@@ -179,10 +179,10 @@ plot_7 <- function() {
   ggplot(data = tvpisbis[order(tvpisbis$Opinie),], aes(fac))+#, aes(x = fac)) +
     geom_bar(aes(fill=Opinie), width = 0.5)+scale_fill_manual(values=c("#14E9E4","#A4FBF9","#E7E3E7","#F07EEB","#B60FAE"))+ theme_bw()+theme(axis.title.x=element_blank(),
                                                                                                                                 axis.text.x=element_blank(),
-                                                                                                                                axis.ticks.x=element_blank())+
+                                                                                                                                axis.ticks.x=element_blank(),legend.text=element_text(size=12))+
     
-    labs(title="Czy domalowanie têczowej auroli do wizerunku \n Matki Boskiej to profanacja?", subtitle="wersja poprawiona")+ylab("wartoœæ procentowa")+xlab("")+
-    xlim(0.25,1.75)
+    labs(title="Czy domalowanie têczowej auroli do wizerunku Matki Boskiej to profanacja?", subtitle="wersja poprawiona")+ylab("wartoœæ procentowa")+xlab("")+
+    xlim(0.65,1.7)
   
 }
 
@@ -195,11 +195,11 @@ plot_8 <- function() {
 }
 
 ## 9)
+options(scipen=10000)
 plot_9 <- function() {
   ggplot(dmar[11:nrow(dmar),], aes(x=rok, y=liczba))+geom_bar(stat = 'identity', width = 0.9, aes(fill=as.factor(srednia))) +theme_bw()+
-    theme(axis.text.x=element_text(angle=45,hjust=1),aspect.ratio = 1/2.5, legend.position = 'bottom')+scale_fill_manual(values=c("#ECECEC","#870B63"))+
-    coord_flip() +
-    geom_text(size = 3,aes(label=liczba), position=position_dodge(width=0.9),hjust=-0.25)+ 
+    theme(axis.text.x=element_text(size=12,angle=45,hjust=1),axis.text.y=element_text(size=12), legend.position = 'bottom')+scale_fill_manual(values=c("#ECECEC","#870B63"))+
+    #geom_text(size = 3,aes(label=liczba), position=position_dodge(width=0.9),hjust=-0.25)+ 
     scale_fill_discrete(name = 'ród³o danych', labels = c('brak danych', 'dane GUS'))+
     labs(title="Liczba zawartych ma³¿eñœtw", subtitle="wersja poprawiona")+
     ylab("liczba ma³¿eñœtw")+xlab("rok") 

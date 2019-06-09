@@ -11,6 +11,9 @@ library(shinydashboard)
 library(ggplot2)
 library(dplyr)
 library(plotly)
+library(gtable)
+library(gridExtra)
+library(grid)
 source("data_for_charts.R")
 
 #---------------------------------------------------------------------------------------------------------------------------
@@ -97,7 +100,7 @@ ui <- dashboardPage(
             tabItem("subitem4",
                     fluidRow(box(title = "Pytanie", status = "primary", 
                                  solidHeader = TRUE, collapsible = TRUE, 
-                                 textInput("text_in4", label = h3("?"), value = ""),
+                                 textInput("text_in4", label = h3("Jaka jest roznica pomiedzy najwyzsza a najnizsza srednia w calach?"), value = ""),
                                  actionButton("runRF4", "Sprawdz"),
                                  tags$p(textOutput("text_out4"), style = "font-size: 200%;"),
                                  width = 6),
@@ -114,7 +117,7 @@ ui <- dashboardPage(
             tabItem("subitem5",
                     fluidRow(box(title = "Pytanie", status = "primary", 
                                  solidHeader = TRUE, collapsible = TRUE, 
-                                 textInput("text_in5", label = h3("?"), value = ""),
+                                 textInput("text_in5", label = h3("Ile procent osob zaznaczylo odpowiedz 'Euro 2016, sukcesy polskich piłkarzy'"), value = ""),
                                  actionButton("runRF5", "Sprawdz"),
                                  tags$p(textOutput("text_out5"), style = "font-size: 200%;"),
                                  width = 6),
@@ -126,12 +129,12 @@ ui <- dashboardPage(
                     fluidRow(box(title = "Niepoprawny wykres", status = "danger", 
                                  solidHeader = TRUE, collapsible = TRUE, imageOutput("img5"), width = 6),
                              box(title = "Poprawny wykres", status = "success", solidHeader = TRUE, 
-                                 collapsible = TRUE, collapsed = TRUE, plotOutput("plot5"), width = 6))
+                                 collapsible = TRUE, collapsed = TRUE, plotOutput("plot5", height = "850px"), width = 6))
             ),
             tabItem("subitem6",
                     fluidRow(box(title = "Pytanie", status = "primary", 
                                  solidHeader = TRUE, collapsible = TRUE, 
-                                 textInput("text_in6", label = h3("?"), value = ""),
+                                 textInput("text_in6", label = h3("Ile mln $ zarobil film: 'Avengers: Wojna bez konca?'"), value = ""),
                                  actionButton("runRF6", "Sprawdz"),
                                  tags$p(textOutput("text_out6"), style = "font-size: 200%;"),
                                  width = 6),
@@ -315,19 +318,19 @@ server <- function(input, output) {
     text_to_display4 <- reactiveVal("Wcisnij przycisk 'Sprawdz', aby poznac poprawna odpowiedz")
     
     observeEvent(input$runRF4, {
-      ifelse(input$text_in4 == "", text_to_display4("Najpierw wpisz swoja odpowiedz."), text_to_display4("Poprawna odpowiedz: ."))
+      ifelse(input$text_in4 == "", text_to_display4("Najpierw wpisz swoja odpowiedz."), text_to_display4("Poprawna odpowiedz to: 5 cali."))
     })
     
     output$text_out4 <- renderPrint({  text_to_display4() })
     
     output$summary4 <- renderUI({ 
       HTML(paste("Co bylo zle:",
-                 "- ",
-                 "- ", 
+                 "- skala zupelnie nie odpowiadala rzeczywistym proporcjom",
+                 "- szerokie ikony utrudniaja porownanie jednej wartosci (wysokosci)", 
                  " ",
                  "Co zostalo poprawione:",
-                 "- ",
-                 "- ", 
+                 "- zmiana skali na liniowa (cm) i proporcjonalna",
+                 "- usuniecie ikonek dla wiekszej czytelnosci", 
                  sep="<br/>"))
     })
     
@@ -346,19 +349,20 @@ server <- function(input, output) {
     text_to_display5 <- reactiveVal("Wcisnij przycisk 'Sprawdz', aby poznac poprawna odpowiedz")
     
     observeEvent(input$runRF5, {
-      ifelse(input$text_in5 == "", text_to_display5("Najpierw wpisz swoja odpowiedz."), text_to_display5("Poprawna odpowiedz: ."))
+      ifelse(input$text_in5 == "", text_to_display5("Najpierw wpisz swoja odpowiedz."), text_to_display5("Poprawna odpowiedz: 1.6 %."))
     })
     
     output$text_out5 <- renderPrint({  text_to_display5() })
     
     output$summary5 <- renderUI({ 
       HTML(paste("Co bylo zle:",
-                 "- ",
-                 "- ", 
+                 "- na jednym wykresie zostaly umieszczone wartosci rozniace sie o rzad wielkosci",
+                 "- na jednym wykresie zostalo umieszczone zbyt wiele wartosci (gigantyczna legenda)", 
+                 "- bardzo zle uzycie kolorow, calkowicie nieczytelna legenda", 
                  " ",
                  "Co zostalo poprawione:",
-                 "- ",
-                 "- ", 
+                 "- rozdzielenie slupkow na dwa wykresy, tak aby mozna bylo porownywac dane o podobnych wartosciach",
+                 "- zmiana kolorowej legendy na podpisy przy osi, aby nie bylo watpliwosci ktore wydarzenie odpowiada jakiej wartosci", 
                  sep="<br/>"))
     })
     
@@ -377,19 +381,22 @@ server <- function(input, output) {
     text_to_display6 <- reactiveVal("Wcisnij przycisk 'Sprawdz', aby poznac poprawna odpowiedz")
     
     observeEvent(input$runRF6, {
-      ifelse(input$text_in6 == "", text_to_display6("Najpierw wpisz swoja odpowiedz."), text_to_display6("Poprawna odpowiedz: ."))
+      ifelse(input$text_in6 == "", text_to_display6("Najpierw wpisz swoja odpowiedz."), text_to_display6("Poprawna odpowiedz: 640,50."))
     })
     
     output$text_out6 <- renderPrint({  text_to_display6() })
     
     output$summary6 <- renderUI({ 
       HTML(paste("Co bylo zle:",
-                 "- ",
-                 "- ", 
+                 "- slupki nieodpowiadajace rzeczywistym proporcjom pomiedzy wartosciami",
+                 "- brak osi",
+                 "- niezbyt czytelne podpisy kolejnych slupkow",
                  " ",
                  "Co zostalo poprawione:",
-                 "- ",
-                 "- ", 
+                 "- dodanie podpisanych osi",
+                 "- odpowiednie proporcje wartosci liczbowych",
+                 "- zmiana wygladu podpisow na bardziej czytelny",
+                 " ", 
                  sep="<br/>"))
     })
     

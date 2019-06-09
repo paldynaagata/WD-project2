@@ -35,17 +35,21 @@ woman <- data.frame(Country = c("Lativa", "Australia", "Scotland", "Peru", "Sout
 
 
 ## 5) Nie znam sie
-nazwa <- c("Swiatowe Dni Mlodziezy", "Realizacja programu Rodzina 500+", "Wizyta papieza w Polsce", 
-          "Wybory 2015 - parlamentarne/prezydenckie", "Rzady PIS, nowa sytuacja polityczna", "Szczyt NATO",
-          "Konflikt wokol� TK", "Inne rzadowe przedsiewziecia, reformy", "1050 rocznica Chrztu Polski",
-          "Protesty spoleczne", "Reforma edukacji", "Brexit", "Wydarzenia z dziedziny gospodarki", 
-          "Obnizenie wieku emerytalnego", "Intronizacja Chrystusa na krola Polski", "Wybory prezydenckie w USA",
-          "Smierc gornikow w kopalni miedzi", "Reformy podatkowe", "Ekshumacje ofiar katastrofy smolenskiej",
-          "Wydarzenia sportowe")
+nazwa = c("Światowe Dni Młodzieży", "Nie ma takiego wydarzenia, nie wydarzyło się nic ważnego", "Realizacja programu Rodzina 500+", "Wizyta papieża w Polsce", 
+          "Wybory 2015 - parlamentarne/prezydenckie", "Rządy PIS, nowa sytuacja polityczna", "Szczyt NATO",
+          "Konflikt wokół TK", "Euro 2016, sukcesy polskich piłkarzy","Inne rządowe przedsięwzięcia, reformy", "1050 rocznica Chrztu Polski",
+          "Protesty społeczne", "Reforma edukacji", "Brexit", "Wydarzenia z dziedziny gospodarki", 
+          "Obniżenie wieku emerytalnego","Inne wydarzenia w Polsce", "Inne wydarzenia na świecie","Intronizacja Chrystusa na króla Polski", "Wybory prezydenckie w USA",
+          "Śmierć górników w kopalni miedzi", "Reformy podatkowe", "Ekshumacje ofiar katastrofy smoleńskiej",
+          "Wydarzenia sportowe"
+)
+procenty = c(14,8.5,10.3,3.4,3.1,2.9,2.7,2.1,1.6,1.2,1.1,1,1,0.9,0.9,0.8,0.7,0.6,0.4,0.3,0.3,0.2,0.2,0.2)
 
-procenty <- c(14, 10.3, 3.4, 3.1, 2.9, 2.7, 2.1, 1.2, 1.1, 1, 1, 0.9, 0.9, 0.8, 0.4, 0.3, 0.3, 0.2, 0.2, 0.2)
+porownanie_procenty <- c(42.5, sum(procenty))
+porownanie_opis <- c("Nie wiem, nie zastanawiałem się, nie interesuje się", "Inne odpowiedzi")
 
-wydarzenia_df <- data.frame(Wydarzenie = nazwa, Glosy = procenty) 
+wydarzenia_df <- data.frame(Wydarzenie=nazwa,Głosy=procenty) 
+porownanie_df <- data.frame(Wydarzenie=porownanie_opis,Głosy=porownanie_procenty) 
 
 
 ## 6) Kinowe hity
@@ -71,10 +75,10 @@ etykietki
 d_zus<-d_zus[-nrow(d_zus),]
 
 ## 8) 
-odpowiedzi<-c('zdecydowanie tak','raczej tak','trudno powiedzie�','raczej nie','zdecydowanie nie')
+odpowiedzi<-c('zdecydowanie tak','raczej tak','trudno powiedzie?','raczej nie','zdecydowanie nie')
 wartosci<-c(28,25,17,16,14)
 tvpis<-data.frame(value=wartosci, resp=as.character(odpowiedzi), fac<-rep(1,5))
-tvpisbis<-data.frame(Opinie=c(rep('zdecydowanie tak',28),rep('raczej tak',25),rep('trudno powiedzie�',17),rep('raczej nie',16),rep('zdecydowanie nie',14)), fac<-rep(1,100))
+tvpisbis<-data.frame(Opinie=c(rep('zdecydowanie tak',28),rep('raczej tak',25),rep('trudno powiedzie?',17),rep('raczej nie',16),rep('zdecydowanie nie',14)), fac<-rep(1,100))
 tvpisbis$Opinie = factor(tvpisbis$Opinie,levels(tvpisbis$Opinie)[rev(c(5,2,3,1,4))])
 
 ## 9)
@@ -159,7 +163,41 @@ plot_4 <- function() {
 
 ## 5) Nie znam sie
 plot_5 <- function() {
+  plot_2 <- ggplot(wydarzenia_df) + 
+    geom_bar(aes(x = reorder(Wydarzenie, Głosy), y=Głosy),stat="identity",fill='darkred',
+             width = 0.8, position = position_dodge(width = 1.6)) +
+    geom_label(aes(x = reorder(Wydarzenie, Głosy), y=Głosy,
+                   label = paste0(wydarzenia_df$Głosy, "%")), 
+               fill = "white", label.size = 0.08, vjust = 3, nudge_x =2.3,
+               nudge_y = 0.6, label.padding = unit(0.15, "lines")) +
+    scale_y_continuous(expand = c(0, 0.2), limits = c(-0.01,15)) +
+    labs(x = "", y = "Procent odpowiedzi") +
+    coord_flip() +
+    theme_bw()
   
+  plot_1 <- ggplot(porownanie_df) + 
+    geom_bar(aes(x = reorder(Wydarzenie, Głosy), y=Głosy),stat="identity",fill='darkred') +
+    geom_label(aes(x = reorder(Wydarzenie, Głosy), y=Głosy,
+                   label = paste0(porownanie_df$Głosy, "%")), 
+               fill = "white", label.size = 0.1, vjust = 3, nudge_x =0.4,
+               nudge_y = 3.8, label.padding = unit(0.15, "lines")) +
+    scale_y_continuous(expand = c(0, 0.2), limits = c(-0.7,100)) +
+    labs(x = "", y = "Procent odpowiedzi") +
+    coord_flip() +
+    theme_bw()
+  
+  g2 <- ggplotGrob(plot_1)
+  g3 <- ggplotGrob(plot_2)
+  g <- rbind(g2, g3, size = "first")
+  g$widths <- unit.pmax(g2$widths, g3$widths)
+  
+  
+  title_text <- textGrob("Które z wydarzeń mijającego roku można Pana(i) zdaniem \nuznać za najważniejsze dla Polski?", 
+                         gp=gpar(fontsize=18, fontface="bold",lineheight=1),
+                         just=c("left"), x=unit(0.05, "npc"), y=unit(0.05, "npc"))
+  subtitle_text <- textGrob("Dane w procentach, pytanie miało charakter otwarty", 
+                            gp=gpar(fontsize=13), just=c("left"), x=unit(0.05, "npc"))
+  grid.arrange(title_text, subtitle_text, g, ncol = 1, heights = c(0.4, 1.1, 14))
 }
 
 
@@ -181,7 +219,7 @@ plot_7 <- function() {
                                                                                                                                 axis.text.x=element_blank(),
                                                                                                                                 axis.ticks.x=element_blank(),legend.text=element_text(size=12))+
     
-    labs(title="Czy domalowanie t�czowej auroli do wizerunku Matki Boskiej to profanacja?", subtitle="wersja poprawiona")+ylab("warto�� procentowa")+xlab("")+
+    labs(title="Czy domalowanie t?czowej auroli do wizerunku Matki Boskiej to profanacja?", subtitle="wersja poprawiona")+ylab("warto?? procentowa")+xlab("")+
     xlim(0.65,1.7)
   
 }
@@ -190,7 +228,7 @@ plot_7 <- function() {
 plot_8 <- function() {
   ggplot(data = d_zus,aes(x = reorder(d_zus$newcol, d_zus$V1), y=d_zus$V4))+geom_bar(stat="identity",fill = "steelblue") + theme_bw()+
     theme(axis.text.x=element_text(size=12,angle=45,hjust=1))+
-    scale_x_discrete(labels=etykietki)+labs(title="Jak wysokie emerytury maj� Polacy", subtitle="wersja poprawiona")+ylab("warto�� procentowa")+xlab("wysoko�� emerytury [z�]")                                                                                                                       
+    scale_x_discrete(labels=etykietki)+labs(title="Jak wysokie emerytury maj? Polacy", subtitle="wersja poprawiona")+ylab("warto?? procentowa")+xlab("wysoko?? emerytury [z?]")                                                                                                                       
   
 }
 
@@ -200,7 +238,7 @@ plot_9 <- function() {
   ggplot(dmar[11:nrow(dmar),], aes(x=rok, y=liczba))+geom_bar(stat = 'identity', width = 0.9, aes(fill=as.factor(srednia))) +theme_bw()+
     theme(axis.text.x=element_text(size=12,angle=45,hjust=1),axis.text.y=element_text(size=12), legend.position = 'bottom')+scale_fill_manual(values=c("#ECECEC","#870B63"))+
     #geom_text(size = 3,aes(label=liczba), position=position_dodge(width=0.9),hjust=-0.25)+ 
-    scale_fill_discrete(name = '�r�d�o danych', labels = c('brak danych', 'dane GUS'))+
-    labs(title="Liczba zawartych ma��e�tw", subtitle="wersja poprawiona")+
-    ylab("liczba ma��e�tw")+xlab("rok") 
+    scale_fill_discrete(name = '?r?d?o danych', labels = c('brak danych', 'dane GUS'))+
+    labs(title="Liczba zawartych ma??e??tw", subtitle="wersja poprawiona")+
+    ylab("liczba ma??e??tw")+xlab("rok") 
 }

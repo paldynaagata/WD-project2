@@ -35,18 +35,18 @@ woman <- data.frame(Country = c("Lativa", "Australia", "Scotland", "Peru", "Sout
 
 
 ## 5) Nie znam sie
-nazwa = c("Światowe Dni Młodzieży", "Nie ma takiego wydarzenia, nie wydarzyło się nic ważnego", "Realizacja programu Rodzina 500+", "Wizyta papieża w Polsce", 
-          "Wybory 2015 - parlamentarne/prezydenckie", "Rządy PIS, nowa sytuacja polityczna", "Szczyt NATO",
-          "Konflikt wokół TK", "Euro 2016, sukcesy polskich piłkarzy","Inne rządowe przedsięwzięcia, reformy", "1050 rocznica Chrztu Polski",
-          "Protesty społeczne", "Reforma edukacji", "Brexit", "Wydarzenia z dziedziny gospodarki", 
-          "Obniżenie wieku emerytalnego","Inne wydarzenia w Polsce", "Inne wydarzenia na świecie","Intronizacja Chrystusa na króla Polski", "Wybory prezydenckie w USA",
-          "Śmierć górników w kopalni miedzi", "Reformy podatkowe", "Ekshumacje ofiar katastrofy smoleńskiej",
-          "Wydarzenia sportowe"
-)
+nazwa = c("Swiatowe Dni Mlodziezy", "Nie ma takiego wydarzenia, nie wydarzyło się nic waznego", "Realizacja programu Rodzina 500+", "Wizyta papieza w Polsce", 
+  "Wybory 2015 - parlamentarne/prezydenckie", "Rzady PIS, nowa sytuacja polityczna", "Szczyt NATO",
+  "Konflikt wokol‚ TK", "Euro 2016, sukcesy polskich piłkarzy", "Inne rzadowe przedsiewziecia, reformy", "1050 rocznica Chrztu Polski",
+  "Protesty spoleczne", "Reforma edukacji", "Brexit", "Wydarzenia z dziedziny gospodarki", 
+  "Obnizenie wieku emerytalnego","Inne wydarzenia w Polsce", "Inne wydarzenia na swiecie", "Intronizacja Chrystusa na krola Polski", "Wybory prezydenckie w USA",
+  "Smierc gornikow w kopalni miedzi", "Reformy podatkowe", "Ekshumacje ofiar katastrofy smolenskiej",
+  "Wydarzenia sportowe")
+
 procenty = c(14,8.5,10.3,3.4,3.1,2.9,2.7,2.1,1.6,1.2,1.1,1,1,0.9,0.9,0.8,0.7,0.6,0.4,0.3,0.3,0.2,0.2,0.2)
 
 porownanie_procenty <- c(42.5, sum(procenty))
-porownanie_opis <- c("Nie wiem, nie zastanawiałem się, nie interesuje się", "Inne odpowiedzi")
+porownanie_opis <- c("Nie wiem, nie zastanawialem sie, nie interesuje sie", "Inne odpowiedzi")
 
 wydarzenia_df <- data.frame(Wydarzenie=nazwa,Głosy=procenty) 
 porownanie_df <- data.frame(Wydarzenie=porownanie_opis,Głosy=porownanie_procenty) 

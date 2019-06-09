@@ -475,7 +475,7 @@ server <- function(input, output) {
     text_to_display9 <- reactiveVal("Wcisnij przycisk 'Sprawdz', aby poznac poprawna odpowiedz")
     
     observeEvent(input$runRF9, {
-      ifelse(input$text_in9 == "", text_to_display9("Najpierw wpisz swoja odpowiedz."), text_to_display9("Poprawna odpowiedz: Nie, nie zawaarto."))
+      ifelse(input$text_in9 == "", text_to_display9("Najpierw wpisz swoja odpowiedz."), text_to_display9("Poprawna odpowiedz: Nie, nie zawarto."))
     })
     
     output$text_out9 <- renderPrint({  text_to_display9() })

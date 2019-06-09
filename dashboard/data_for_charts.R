@@ -48,8 +48,8 @@ procenty = c(14,8.5,10.3,3.4,3.1,2.9,2.7,2.1,1.6,1.2,1.1,1,1,0.9,0.9,0.8,0.7,0.6
 porownanie_procenty <- c(42.5, sum(procenty))
 porownanie_opis <- c("Nie wiem, nie zastanawialem sie, nie interesuje sie", "Inne odpowiedzi")
 
-wydarzenia_df <- data.frame(Wydarzenie=nazwa,Głosy=procenty) 
-porownanie_df <- data.frame(Wydarzenie=porownanie_opis,Głosy=porownanie_procenty) 
+wydarzenia_df <- data.frame(Wydarzenie=nazwa,Glosy=procenty) 
+porownanie_df <- data.frame(Wydarzenie=porownanie_opis,Glosy=porownanie_procenty) 
 
 
 ## 6) Kinowe hity
@@ -164,10 +164,10 @@ plot_4 <- function() {
 ## 5) Nie znam sie
 plot_5 <- function() {
   plot_2 <- ggplot(wydarzenia_df) + 
-    geom_bar(aes(x = reorder(Wydarzenie, Głosy), y=Głosy),stat="identity",fill='darkred',
+    geom_bar(aes(x = reorder(Wydarzenie, Glosy), y=Glosy),stat="identity",fill='darkred',
              width = 0.8, position = position_dodge(width = 1.6)) +
-    geom_label(aes(x = reorder(Wydarzenie, Głosy), y=Głosy,
-                   label = paste0(wydarzenia_df$Głosy, "%")), 
+    geom_label(aes(x = reorder(Wydarzenie, Glosy), y=Glosy,
+                   label = paste0(wydarzenia_df$Glosy, "%")), 
                fill = "white", label.size = 0.08, vjust = 3, nudge_x =2.3,
                nudge_y = 0.6, label.padding = unit(0.15, "lines")) +
     scale_y_continuous(expand = c(0, 0.2), limits = c(-0.01,15)) +
@@ -176,9 +176,9 @@ plot_5 <- function() {
     theme_bw()
   
   plot_1 <- ggplot(porownanie_df) + 
-    geom_bar(aes(x = reorder(Wydarzenie, Głosy), y=Głosy),stat="identity",fill='darkred') +
-    geom_label(aes(x = reorder(Wydarzenie, Głosy), y=Głosy,
-                   label = paste0(porownanie_df$Głosy, "%")), 
+    geom_bar(aes(x = reorder(Wydarzenie, Glosy), y=Glosy),stat="identity",fill='darkred') +
+    geom_label(aes(x = reorder(Wydarzenie, Glosy), y=Glosy,
+                   label = paste0(porownanie_df$Glosy, "%")), 
                fill = "white", label.size = 0.1, vjust = 3, nudge_x =0.4,
                nudge_y = 3.8, label.padding = unit(0.15, "lines")) +
     scale_y_continuous(expand = c(0, 0.2), limits = c(-0.7,100)) +
